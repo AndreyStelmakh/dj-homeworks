@@ -28,3 +28,17 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
+
+from django.http import HttpResponse
+
+
+def recipe_view(request, recipe_name):
+    servings = int(request.GET.get('servings', 1))
+    recipe = DATA.get(recipe_name, None)
+    if recipe is not None:
+        recipe = {ingredient: amount*servings for ingredient, amount in recipe.items()}
+    context = {
+        'recipe': recipe
+    }
+    return render(request, 'calculator/index.html', context)
+
